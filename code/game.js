@@ -2,7 +2,8 @@
 var actorChars = {
   "@": Player,
   "o": Coin, // A coin will wobble up and down
-  "=": Lava, "|": Lava, "v": Lava  
+  "=": Lava, "|": Lava, "v": Lava 
+
 };
 
 function Level(plan) {
@@ -38,6 +39,9 @@ function Level(plan) {
       // Because there is a third case (space ' '), use an "else if" instead of "else"
       else if (ch == "!")
         fieldType = "lava";
+	// Add doge
+	  else if (ch == "y")
+		fieldType = "floater";
 
       // "Push" the fieldType, which is a string, onto the gridLine array (at the end).
       gridLine.push(fieldType);
@@ -51,6 +55,7 @@ function Level(plan) {
     return actor.type == "player";
   })[0];
 }
+
 
 // Check if level is finished
 Level.prototype.isFinished = function() {
