@@ -309,9 +309,9 @@ Coin.prototype.act = function(step) {
   this.pos = this.basePos.plus(new Vector(0, wobblePos));
 };
 
-var maxStep = 0.05;
+var maxStep = 0.02;
 
-var playerXSpeed = 7;
+var playerXSpeed = 9;
 
 Player.prototype.moveX = function(step, level, keys) {
   this.speed.x = 0;
@@ -331,8 +331,8 @@ Player.prototype.moveX = function(step, level, keys) {
     this.pos = newPos;
 };
 
-var gravity = 30;
-var jumpSpeed = 17;
+var gravity = 20;
+var jumpSpeed = 22;
 
 Player.prototype.moveY = function(step, level, keys) {
   // Accelerate player downward (always)
@@ -344,6 +344,9 @@ Player.prototype.moveY = function(step, level, keys) {
   // jump if they are touching some obstacle.
   if (obstacle) {
     level.playerTouched(obstacle);
+	if(obstacle=='lava'){
+		this.pos = new Vector(10,10);
+	}
     if (keys.up && this.speed.y > 0)
       this.speed.y = -jumpSpeed;
     else

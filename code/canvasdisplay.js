@@ -67,6 +67,7 @@ CanvasDisplay.prototype.clearDisplay = function() {
                    this.canvas.width, this.canvas.height);
 };
 
+
 var otherSprites = document.createElement("img");
 otherSprites.src = "img/sprites.png";
 
@@ -135,3 +136,4 @@ CanvasDisplay.prototype.drawActors = function() {
     }
   }, this);
 };
+
