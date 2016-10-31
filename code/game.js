@@ -43,8 +43,7 @@ function Level(plan) {
         fieldType = "lava";
 	  else if (ch == "y")
 		fieldType = "floater";
-	  else if (ch == "f")
-		fieldType = "food";
+	  
 	
 
       // "Push" the fieldType, which is a string, onto the gridLine array (at the end).
@@ -405,31 +404,13 @@ Level.prototype.playerTouched = function(type, actor) {
   if (type == "lava" && this.status == null) {
     this.status = "lost";
     this.finishDelay = 1;
-  } else if (type == "coin") {
-    this.actors = this.actors.filter(function(other) {
-      return other != actor;
-    }); 
-	if (type == "food") {
+  } else if (type == "coin" || type == "food") {
     this.actors = this.actors.filter(function(other) {
       return other != actor;
     }); 
     // If there aren't any coins left, player wins
-    if (!this.actors.some(function(actor) {
-           return actor.type == "coin";
-         })) {
-      this.status = "won";
-      this.finishDelay = 1;
-    };
-	if (!this.actors.some(function(actor) {
-           return actor.type == "food";
-         })); {
-	  this.status = "won";
-      this.finishDelay = 1;
-	  }
-	
-  
-  }}
-};
+   
+}};
 
 // Arrow key codes for readibility
 var arrowCodes = {37: "left", 38: "up", 39: "right"};
