@@ -9,6 +9,7 @@
 .actor  { position: absolute;  }
 .coin   { background: rgb(241, 229, 89); }
 .player { background: rgb(64, 64, 64); }
+.food  { background: brown; }
 
 .game {
   overflow: hidden;

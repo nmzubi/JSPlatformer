@@ -92,6 +92,7 @@ CanvasDisplay.prototype.drawBackground = function() {
   }
 };
 
+
 var playerSprites = document.createElement("img");
 playerSprites.src = "img/player.png";
 var playerXOverlap = 4;
@@ -128,12 +129,12 @@ CanvasDisplay.prototype.drawActors = function() {
     var y = (actor.pos.y - this.viewport.top) * scale;
     if (actor.type == "player") {
       this.drawPlayer(x, y, width, height);
-    } else {
+    } else  {
       var tileX = (actor.type == "coin" ? 2 : 1) * scale;
       this.cx.drawImage(otherSprites,
                         tileX, 0, width, height,
                         x,     y, width, height);
-    }
-  }, this);
+    } 
+  }, this)
 };
 

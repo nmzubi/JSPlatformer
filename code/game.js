@@ -1,8 +1,10 @@
 // Map each class of actor to a character
 var actorChars = {
   "@": Player,
+  "f": Food,
   "o": Coin, // A coin will wobble up and down
   "=": Lava, "|": Lava, "v": Lava 
+  
 
 };
 
@@ -39,9 +41,11 @@ function Level(plan) {
       // Because there is a third case (space ' '), use an "else if" instead of "else"
       else if (ch == "!")
         fieldType = "lava";
-	// Add doge
 	  else if (ch == "y")
 		fieldType = "floater";
+	  else if (ch == "f")
+		fieldType = "food";
+	
 
       // "Push" the fieldType, which is a string, onto the gridLine array (at the end).
       gridLine.push(fieldType);
@@ -61,6 +65,20 @@ function Level(plan) {
 Level.prototype.isFinished = function() {
   return this.status != null && this.finishDelay < 0;
 };
+
+function Coin(pos) {
+  this.basePos = this.pos = pos.plus(new Vector(0.2, 0.1));
+  this.size = new Vector(0.6, 0.6);
+  this.wobble = Math.random() * Math.PI * 2;
+}
+Coin.prototype.type = "coin";
+
+function Food(pos) {
+  this.basePos = this.pos = pos.plus(new Vector(0.2, 0.1));
+  this.size = new Vector(0.6, 0.6);
+  this.wobble = Math.random() * Math.PI * 2;
+}
+Food.prototype.type = "food";
 
 function Vector(x, y) {
   this.x = x; this.y = y;
@@ -85,14 +103,6 @@ function Player(pos) {
 }
 Player.prototype.type = "player";
 
-// Add a new actor type as a class
-function Coin(pos) {
-  this.basePos = this.pos = pos.plus(new Vector(0.2, 0.1));
-  this.size = new Vector(0.6, 0.6);
-  // Make it go back and forth in a sine wave.
-  this.wobble = Math.random() * Math.PI * 2;
-}
-Coin.prototype.type = "coin";
 
 // Lava is initialized based on the character, but otherwise has a
 // size and position
@@ -243,8 +253,6 @@ Level.prototype.obstacleAt = function(pos, size) {
 // Collision detection for actors is handled separately from 
 // tiles. 
 Level.prototype.actorAt = function(actor) {
-  // Loop over each actor in our actors list and compare the 
-  // boundary boxes for overlaps.
   for (var i = 0; i < this.actors.length; i++) {
     var other = this.actors[i];
     // if the other actor isn't the acting actor
@@ -309,7 +317,26 @@ Coin.prototype.act = function(step) {
   this.pos = this.basePos.plus(new Vector(0, wobblePos));
 };
 
-var maxStep = 0.02;
+var maxStep = 0.05;
+
+
+
+Food.prototype.act = function(step) {
+  this.wobble += step * wobbleSpeed;
+  var wobblePos = Math.sin(this.wobble) * wobbleDist;
+  this.pos = this.basePos.plus(new Vector(0, wobblePos));
+};
+
+var maxStep = 0.05;
+
+Food.prototype.act = function(step) {
+  this.wobble += step * wobbleSpeed;
+  var wobblePos = Math.sin(this.wobble) * wobbleDist;
+  this.pos = this.basePos.plus(new Vector(0, wobblePos));
+};
+
+var maxStep = 0.05;
+
 
 var playerXSpeed = 9;
 
@@ -381,15 +408,27 @@ Level.prototype.playerTouched = function(type, actor) {
   } else if (type == "coin") {
     this.actors = this.actors.filter(function(other) {
       return other != actor;
-    });
+    }); 
+	if (type == "food") {
+    this.actors = this.actors.filter(function(other) {
+      return other != actor;
+    }); 
     // If there aren't any coins left, player wins
     if (!this.actors.some(function(actor) {
            return actor.type == "coin";
          })) {
       this.status = "won";
       this.finishDelay = 1;
-    }
-  }
+    };
+	if (!this.actors.some(function(actor) {
+           return actor.type == "food";
+         })); {
+	  this.status = "won";
+      this.finishDelay = 1;
+	  }
+	
+  
+  }}
 };
 
 // Arrow key codes for readibility
@@ -473,4 +512,4 @@ function runGame(plans, Display) {
     });
   }
   startLevel(0);
-}
+};
