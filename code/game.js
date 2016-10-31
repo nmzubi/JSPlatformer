@@ -4,8 +4,6 @@ var actorChars = {
   "f": Food,
   "o": Coin, // A coin will wobble up and down
   "=": Lava, "|": Lava, "v": Lava 
-  
-
 };
 
 function Level(plan) {
