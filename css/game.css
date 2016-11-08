@@ -1,6 +1,7 @@
-.background    { background: rgb(188, 156, 299);
+.background    { background: rgb(168, 168, 168);
                  table-layout: fixed;
-                 border-spacing: 0;   }
+                 border-spacing: 0;  
+					background-image: url(img\moon.png);}
 .background  { padding: 0;          }
 .lava          { background: rgb(255, 100, 100); }
 .wall          { background: white;   }
@@ -11,6 +12,7 @@
 .player { background: rgb(64, 64, 64); }
 .food  { background: rgb(102, 51, 51); }
 .badGuy { background: red; }
+
 
 .game {
   overflow: hidden;
