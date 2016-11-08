@@ -87,7 +87,7 @@ CanvasDisplay.prototype.drawBackground = function() {
       var tileX = tile == "lava" ? scale : 0;
       this.cx.drawImage(otherSprites,
                         tileX,         0, scale, scale,
-                        screenX, screenY, scale, scale);
+                        screenX, screenY, scale, scale);				
     }
   }
 };
@@ -122,6 +122,9 @@ CanvasDisplay.prototype.drawPlayer = function(x, y, width,
   this.cx.restore();
 };
 
+var foodSprite = document.createElement("img");
+foodSprite.src = "img/food.png";
+
 CanvasDisplay.prototype.drawActors = function() {
   this.level.actors.forEach(function(actor) {
     var width = actor.size.x * scale;
@@ -135,11 +138,14 @@ CanvasDisplay.prototype.drawActors = function() {
       this.cx.drawImage(otherSprites,
                         tileX, 0, width, height,
                         x,     y, width, height);
-	 var tileX = (actor.type == "food" ? 3 : 2 ) * scale;
-      this.cx.drawImage(otherSprites,
+	  };
+	  
+	  if (actor.type == "food"){
+		var tileX = (actor.type == "food" ? 2 : 1) * scale;
+		this.cx.drawImage(foodSprite,
                         tileX, 0, width, height,
                         x,     y, width, height);
-	  };
+	}
   }, this)
 };
 
