@@ -3,10 +3,10 @@ var actorChars = {
   "@": Player,
   "f": Food,
   "o": Coin, // A coin will wobble up and down
-  "=": Lava, "|": Lava, "v": Lava 
+  "=": Lava, "|": Lava, "v": Lava
   
-
 };
+var lives = 5;
 
 function Level(plan) {
   // Use the length of a single row to set the width of the level
@@ -43,8 +43,6 @@ function Level(plan) {
         fieldType = "lava";
 	  else if (ch == "y")
 		fieldType = "floater";
-	  
-	
 
       // "Push" the fieldType, which is a string, onto the gridLine array (at the end).
       gridLine.push(fieldType);
@@ -59,25 +57,10 @@ function Level(plan) {
   })[0];
 }
 
-
 // Check if level is finished
 Level.prototype.isFinished = function() {
   return this.status != null && this.finishDelay < 0;
 };
-
-function Coin(pos) {
-  this.basePos = this.pos = pos.plus(new Vector(0.2, 0.1));
-  this.size = new Vector(0.6, 0.6);
-  this.wobble = Math.random() * Math.PI * 2;
-}
-Coin.prototype.type = "coin";
-
-function Food(pos) {
-  this.basePos = this.pos = pos.plus(new Vector(0.2, 0.1));
-  this.size = new Vector(0.6, 0.6);
-  this.wobble = Math.random() * Math.PI * 2;
-}
-Food.prototype.type = "food";
 
 function Vector(x, y) {
   this.x = x; this.y = y;
@@ -102,6 +85,21 @@ function Player(pos) {
 }
 Player.prototype.type = "player";
 
+// Add a new actor type as a class
+function Coin(pos) {
+  this.basePos = this.pos = pos.plus(new Vector(0.2, 0.1));
+  this.size = new Vector(0.6, 0.6);
+  // Make it go back and forth in a sine wave.
+  this.wobble = Math.random() * Math.PI * 2;
+}
+Coin.prototype.type = "coin";
+
+function Food(pos) {
+  this.basePos = this.pos = pos.plus(new Vector(0.2, 0.1));
+  this.size = new Vector(0.6, 0.6);
+  this.wobble = Math.random() * Math.PI * 2;
+}
+Food.prototype.type = "food";
 
 // Lava is initialized based on the character, but otherwise has a
 // size and position
@@ -121,6 +119,7 @@ function Lava(pos, ch) {
   }
 }
 Lava.prototype.type = "lava";
+
 
 // Helper function to easily create an element of a type provided 
 function elt(name, className) {
@@ -252,6 +251,8 @@ Level.prototype.obstacleAt = function(pos, size) {
 // Collision detection for actors is handled separately from 
 // tiles. 
 Level.prototype.actorAt = function(actor) {
+  // Loop over each actor in our actors list and compare the 
+  // boundary boxes for overlaps.
   for (var i = 0; i < this.actors.length; i++) {
     var other = this.actors[i];
     // if the other actor isn't the acting actor
@@ -316,10 +317,6 @@ Coin.prototype.act = function(step) {
   this.pos = this.basePos.plus(new Vector(0, wobblePos));
 };
 
-var maxStep = 0.05;
-
-
-
 Food.prototype.act = function(step) {
   this.wobble += step * wobbleSpeed;
   var wobblePos = Math.sin(this.wobble) * wobbleDist;
@@ -335,7 +332,6 @@ Food.prototype.act = function(step) {
 };
 
 var maxStep = 0.05;
-
 
 var playerXSpeed = 9;
 
@@ -370,7 +366,7 @@ Player.prototype.moveY = function(step, level, keys) {
   // jump if they are touching some obstacle.
   if (obstacle) {
     level.playerTouched(obstacle);
-	if(obstacle=='lava'){
+	if(obstacle == "lava"){
 		this.pos = new Vector(10,10);
 	}
     if (keys.up && this.speed.y > 0)
@@ -409,8 +405,20 @@ Level.prototype.playerTouched = function(type, actor) {
       return other != actor;
     }); 
     // If there aren't any coins left, player wins
-   
-}};
+    if (!this.actors.some(function(actor) {
+           return actor.type == "coin";
+         })) {
+      this.status = "won";
+      this.finishDelay = 1;
+    } else if (type == "food") {
+    this.actors = this.actors.filter(function(other) {
+      return other != actor;
+
+    lives += 1;
+	})
+  }
+};
+}
 
 // Arrow key codes for readibility
 var arrowCodes = {37: "left", 38: "up", 39: "right"};
@@ -456,7 +464,7 @@ function runAnimation(frameFunc) {
       requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
-}
+};
 
 // This assigns the array that will be updated anytime the player
 // presses an arrow key. We can access it from anywhere.
@@ -480,17 +488,29 @@ function runLevel(level, Display, andThen) {
 }
 
 function runGame(plans, Display) {
+var life = document.getElementById('lives');
   function startLevel(n) {
     // Create a new level using the nth element of array plans
     // Pass in a reference to Display function, DOMDisplay (in index.html).
     runLevel(new Level(plans[n]), Display, function(status) {
       if (status == "lost")
         startLevel(n);
+	    lives -= 1;
+		if (lives == 0) {
+          var gameOver = confirm('Game Over. Try again.');
+		  }
+          if (gameOver){
+            location.reload();
+          }
       else if (n < plans.length - 1)
         startLevel(n + 1);
-      else
-        console.log("You win!");
+      else {
+        var winner = confirm('You win! Do you want to start over?');
+        if (winner) {
+          location.reload();
+		}
+	  }
     });
   }
   startLevel(0);
-};
+}
