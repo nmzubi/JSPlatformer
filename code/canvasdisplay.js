@@ -1,4 +1,4 @@
-document.getElementById("canvas").style.background = "url('images/splashscreen.png')";
+document.getElementById("canvas").style.background = "url('img/moon.png')";
 
 function flipHorizontally(context, around) {
   context.translate(around, 0);
