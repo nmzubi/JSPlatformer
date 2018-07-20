@@ -1,5 +1,3 @@
-document.getElementById("canvas").style.background = "url('img/moon.png')";
-
 function flipHorizontally(context, around) {
   context.translate(around, 0);
   context.scale(-1, 1);
