@@ -3,12 +3,12 @@ var actorChars = {
   "@": Player,
   "f": Food,
   "o": Coin, // A coin will wobble up and down
-<<<<<<< HEAD
+<<<<< HEAD
   "=": Lava, "|": Lava, "v": Lava
   
 =======
   "=": Lava, "|": Lava, "v": Lava 
->>>>>>> origin/master
+>>>>> origin/master
 };
 var lives = 5;
 
