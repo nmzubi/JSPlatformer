@@ -1,4 +1,4 @@
-.background    { background-image: url("img\moon.jpg");
+.background    { background-image: url(img\moon.jpg);
                  table-layout: fixed;
                  border-spacing: 0;  
 		 }
