@@ -1,6 +1,6 @@
-.background   { 
-                 table-layout: fixed;
-                 border-spacing: 0;  
+.background   { table-layout: fixed;
+                border-spacing: 0;  
+		background-image: url(img/moon.png);
 		 }
 .background  { padding: 0;          }
 .lava          { background: rgb(255, 100, 100); }
