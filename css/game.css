@@ -1,4 +1,4 @@
-.background   #canvas { background-image: url(https://github.com/nmzubi/jsplatformer/blob/master/img/moon.png);
+.background   { 
                  table-layout: fixed;
                  border-spacing: 0;  
 		 }
